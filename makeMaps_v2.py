@@ -13,7 +13,7 @@ from processDriftCheck_v2 import preprocessDriftCheck
 # script will prompt you to choose a directory - this directory must contain 2 files with criteria:
 #   1)a tif file that is a concatenated widefield movie for drifting bar stim presentation with the
 #   nomenclature 'drift*cat.tif'
-#   2) associated metadata.mat file with the nomenclature 'drift*.mat
+#   2) associated metadata.mat file with the nomenclature 'drift*.mat'
 # no other files in this directory should meet this criteria (crash otherwise)
 # routine still works if there are other files in directory that DONT fit nomenclature
 
@@ -100,32 +100,45 @@ if saveIms == 1:
 
 print("plotting figs")
 # plots
-fig, axs = plt.subplots(3, 2, sharex=True, sharey=True)
+fig, _axs = plt.subplots(3, 2, sharex=True, sharey=True)
 fig.suptitle(sessionID)
+axs = _axs.flatten()
 
-axs[0, 0].set_title('alt map')
-axs[0, 0].imshow(output[0], cmap='jet')
+axs[0].set_title('alt map filtered')
+axs[0].imshow(output[0], cmap='jet')
 
-axs[0, 1].set_title('azi map')
-axs[0, 1].imshow(output[1], cmap='jet')
+axs[1].set_title('azi map filtered')
+axs[1].imshow(output[1], cmap='jet')
 
-axs[1, 0].set_title('alt power map')
-axs[1, 0].imshow(output[2], cmap='hot')
+#fig.colorbar(ax=[[0, 0], [0, 1]])
 
-axs[1, 1].set_title('azi power map')
-axs[1, 1].imshow(output[3], cmap='hot')
+axs[2].set_title('alt power map')
+axs[2].imshow(output[2], cmap='hot')
 
-axs[2, 0].set_title('sign map')
-axs[2, 0].imshow(output[5], cmap='coolwarm')
+axs[3].set_title('azi power map')
+axs[3].imshow(output[3], cmap='hot')
 
-axs[2, 1].set_title('Sign Map overlay')
-axs[2, 1].imshow(vasculature_map, cmap='Greys_r')
-axs[2, 1].imshow(output[5], cmap='coolwarm', alpha=0.5)
+axs[4].set_title('sign map')
+axs[4].imshow(output[5], cmap='coolwarm')
+
+axs[5].set_title('Sign Map overlay')
+axs[5].imshow(vasculature_map, cmap='Greys_r')
+axs[5].imshow(output[5], cmap='coolwarm', alpha=0.5)
+
+
+plt.figure()
+fig2, _ax2 = plt.subplots(1,2, sharex=True, sharey=True)
+fig2.suptitle('sessionID: Unfiltered Radian Maps')
+axs2 = _ax2.flatten()
+
+fig2.colorbar(axs2[0].imshow(altitude_map,cmap='jet'),ax=axs2[0])
+axs2[0].set_title('Altitude Map Raw')
+fig2.colorbar(axs2[1].imshow(azimuth_map,cmap='jet'),ax=axs2[1])
+axs2[1].set_title('Azimuth Map Raw')
 plt.show()
-
-
 ##########patches###################
 # trial.processTrial(isPlot=True)
+
 # plt.show()
 #
 # _ = trial.plotFinalPatchBorders2()
